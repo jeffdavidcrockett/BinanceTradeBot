@@ -177,6 +177,4 @@ def in_trade(enter_price):
         time.sleep(10)
 
 
-# bot = Bot()
-# db = Database()
 startup()
