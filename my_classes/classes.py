@@ -66,25 +66,16 @@ class Bot:
                                         interval=Client.KLINE_INTERVAL_4HOUR,
                                         limit=55)
         klines.reverse()
-        current_price = float(klines[0][4])
 
-        # calculate lower band
-        last_20_closes = []
-        for i in range(20):
-            last_20_closes.append(float(klines[i][4]))
-        SMA = sum(last_20_closes) / 20
+        last_20_closes = [float(klines[i][4]) for i in range(20)]
+        simple_ma = sum(last_20_closes) / 20
+        squared_list = [(close - simple_ma)**2 for close in last_20_closes]
 
-        squared_list = []
-        for close in last_20_closes:
-            diff = close - SMA
-            squared_list.append(diff**2)
-
-        sum_of_squares = sum(squared_list) / 20
-        standard_deviation = math.sqrt(sum_of_squares)
-        lower_band = round(SMA - (standard_deviation * 2), 8)
+        standard_deviation = math.sqrt(sum(squared_list) / 20)
+        lower_band = round(simple_ma - (standard_deviation * 2), 8)
 
         # calculate upper band (not used currently)
-        upper_band = SMA + (standard_deviation * 2)
+        # upper_band = simple_ma + (standard_deviation * 2)
 
         return lower_band
 
