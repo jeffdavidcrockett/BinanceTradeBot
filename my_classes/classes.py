@@ -1,5 +1,3 @@
-import sys
-sys.path.append("\\venv\\lib\\site-packages\\binance")
 from binance.client import Client
 import sqlite3
 import math
@@ -105,31 +103,3 @@ class Bot:
                                         limit=1)
         current_price = float(klines[0][4])
         return current_price
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
