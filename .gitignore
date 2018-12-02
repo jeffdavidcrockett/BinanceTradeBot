@@ -1,0 +1,10 @@
+basic_testing.py
+testing.py
+more_testing.py
+main.spec
+dist
+trade_bot.db
+__pycache__
+venv
+.idea
+build
