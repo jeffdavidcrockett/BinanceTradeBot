@@ -39,9 +39,10 @@ class Bot:
     def connect(self, api_key, secret_key):
         self.client = Client(api_key, secret_key)
 
-    def setup_params(self, asset, trade_amount):
+    def setup_params(self, asset, trade_amount, interval):
         self.asset = asset
         self.trade_amount = trade_amount
+        self.time_interval = interval
 
     def check_params(self):
         if self.asset and self.trade_amount:
@@ -61,11 +62,20 @@ class Bot:
 
         return ticker_found
 
-    def get_bbands(self):
+    def get_klines(self, limit_):
+        kline_intervals = {'15m': Client.KLINE_INTERVAL_15MINUTE, '30m': Client.KLINE_INTERVAL_30MINUTE,
+                           '1H': Client.KLINE_INTERVAL_1HOUR, '2H': Client.KLINE_INTERVAL_2HOUR,
+                           '4H': Client.KLINE_INTERVAL_4HOUR, '6H': Client.KLINE_INTERVAL_6HOUR,
+                           '12H': Client.KLINE_INTERVAL_12HOUR, '1D': Client.KLINE_INTERVAL_1DAY}
+
         klines = self.client.get_klines(symbol=self.asset,
-                                        interval=Client.KLINE_INTERVAL_4HOUR,
-                                        limit=55)
+                                        interval=kline_intervals[self.time_interval],
+                                        limit=limit_)
         klines.reverse()
+        return klines
+
+    def get_bbands(self):
+        klines = self.get_klines(25)
 
         last_20_closes = [float(klines[i][4]) for i in range(20)]
         simple_ma = sum(last_20_closes) / 20
@@ -89,8 +99,6 @@ class Bot:
                                       quantity=self.amount)
 
     def get_current_asset_price(self):
-        klines = self.client.get_klines(symbol=self.asset,
-                                        interval=Client.KLINE_INTERVAL_4HOUR,
-                                        limit=1)
+        klines = self.get_klines(1)
         current_price = float(klines[0][4])
         return current_price
