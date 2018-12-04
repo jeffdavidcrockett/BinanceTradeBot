@@ -111,10 +111,19 @@ def setup(btc_balance):
                 print('Maximum trade amount allowed: ', max_trade_size)
                 trade_amount = float(input('> '))
                 if trade_amount <= max_trade_size:
-                    bot.setup_params(selected_asset, trade_amount)
-                    print('\nSetup complete')
-                    time.sleep(2)
-                    main_menu()
+                    interval_list = ['15m', '30m', '1H', '2H', '4H', '6H', '12H', '1D']
+                    print('\nEnter the time frame you would like to trade on')
+                    print('Select from the following options:')
+                    for item in interval_list:
+                        print(item)
+                    interval = input('> ')
+                    if interval in interval_list:
+                        bot.setup_params(selected_asset, trade_amount, interval)
+                        print('\nSetup complete')
+                        time.sleep(2)
+                        main_menu()
+                    else:
+                        print('\n*** Invalid interval selection ***\n')
                 elif trade_amount > max_trade_size:
                     print('\n*** Not enough funds to make desired trade size ***\n'
                           '*** Please deposit bitcoin to trade ***\n'
