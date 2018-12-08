@@ -1,4 +1,5 @@
 from my_classes import db, bot
+import binance.exceptions
 import sys
 import time
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -221,7 +222,7 @@ def look_for_trade():
             btc_balance = bot.get_btc_balance()
 
             return lower, current_price, percentage_diff, btc_balance
-        except BinanceAPIException as error:
+        except binance.exceptions.BinanceAPIException as error:
             return error
 
 
