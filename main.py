@@ -1,4 +1,5 @@
-from my_classes import db, bot
+from my_classes.trade_bot import Bot
+from my_classes.database import Database
 import binance.exceptions
 import sys
 import time
@@ -226,5 +227,6 @@ def look_for_trade():
             return error
 
 
-
+bot = Bot()
+db = Database()
 startup()
