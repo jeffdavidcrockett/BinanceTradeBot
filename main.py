@@ -136,6 +136,7 @@ def setup(btc_balance):
 
 
 def run():
+    count = 1
     if bot.check_params():
         while True:
             vals = look_for_trade()
@@ -155,7 +156,10 @@ def run():
                 error = vals
                 print(error)
 
-            time.sleep(15)
+            time.sleep(count)
+            count *= 2
+            if count > 32:
+                count = 1
         # try:
         #     lower = bot.get_bbands()
         #     current_price = bot.get_current_asset_price()
