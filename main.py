@@ -138,22 +138,45 @@ def setup(btc_balance):
 def run():
     if bot.check_params():
         while True:
-            lower = bot.get_bbands()
-            current_price = bot.get_current_asset_price()
-            percentage_diff = round((current_price - lower) / lower * 100, 2)
-            btc_balance = bot.get_btc_balance()
+            vals = look_for_trade()
 
-            print('\nLOOKING FOR TRADE')
-            print('BTC Balance:', btc_balance)
-            print('Lower band:', lower)
-            print('Current price:', current_price)
-            print('Percentage difference:', str(percentage_diff) + '%')
+            if len(vals) > 1:
+                lower, current_price, percentage_diff, btc_balance = vals
+                print('\nLOOKING FOR TRADE')
+                print('BTC Balance:', btc_balance)
+                print('Lower band:', lower)
+                print('Current price:', current_price)
+                print('Percentage difference:', str(percentage_diff) + '%')
 
-            if percentage_diff <= -4:
-                print('\nTRADE FOUND, ENTERING TRADE\n')
-                in_trade(current_price)
+                if percentage_diff <= -4:
+                    print('\nTRADE FOUND\n')
+                    in_trade(current_price)
+            else:
+                error = vals
+                print(error)
 
             time.sleep(15)
+        # try:
+        #     lower = bot.get_bbands()
+        #     current_price = bot.get_current_asset_price()
+        #     percentage_diff = round((current_price - lower) / lower * 100, 2)
+        #     btc_balance = bot.get_btc_balance()
+        # except BinanceAPIException as e:
+        #     print(e)
+        # else:
+        #     print('\nLOOKING FOR TRADE')
+        #     print('BTC Balance:', btc_balance)
+        #     print('Lower band:', lower)
+        #     print('Current price:', current_price)
+        #     print('Percentage difference:', str(percentage_diff) + '%')
+        #
+        #     if percentage_diff <= -4:
+        #         print('\nTRADE FOUND, ENTERING TRADE\n')
+        #         in_trade(current_price)
+        #
+        #     time.sleep(15)
+        # finally:
+        #     run()
     else:
         print('\n*** Please run setup first ***\n')
         time.sleep(2)
@@ -184,6 +207,19 @@ def in_trade(enter_price):
             main_menu()
 
         time.sleep(10)
+
+
+def look_for_trade():
+        try:
+            lower = bot.get_bbands()
+            current_price = bot.get_current_asset_price()
+            percentage_diff = round((current_price - lower) / lower * 100, 2)
+            btc_balance = bot.get_btc_balance()
+
+            return lower, current_price, percentage_diff, btc_balance
+        except BinanceAPIException as error:
+            return error
+
 
 
 startup()
