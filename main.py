@@ -8,6 +8,11 @@ from datetime import datetime
 
 
 def startup():
+    """
+    First function to run. Gives user the options to either login,
+    create a new account, or exit the program.
+
+    """
     print('\n1. Login\n'
           '2. Create Account\n'
           '3. Exit\n')
@@ -24,6 +29,10 @@ def startup():
 
 
 def login():
+    """
+    Allows user to login to their existing account using a username
+    and password.
+    """
     print("\nEnter your username, or 'X' to return to previous menu")
     username = input('> ')
     if username == 'X':
@@ -51,6 +60,11 @@ def login():
 
 
 def create_account():
+    """
+    Allows user to create a new account. User defines a username, a password,
+    Binance account api key, and Binance secret key. New account will be stored
+    in the on-disk database through sqlite.
+    """
     print('\nEnter a username')
     username = input('> ')
     print('\nEnter a password')
@@ -74,6 +88,9 @@ def create_account():
 
 
 def main_menu():
+    """
+
+    """
     btc_balance = bot.get_btc_balance()
     print('\n--------------------------------\n')
     print('           MAIN MENU\n')
@@ -162,31 +179,22 @@ def run():
             count *= 2
             if count > 32:
                 count = 1
-        # try:
-        #     lower = bot.get_bbands()
-        #     current_price = bot.get_current_asset_price()
-        #     percentage_diff = round((current_price - lower) / lower * 100, 2)
-        #     btc_balance = bot.get_btc_balance()
-        # except BinanceAPIException as e:
-        #     print(e)
-        # else:
-        #     print('\nLOOKING FOR TRADE')
-        #     print('BTC Balance:', btc_balance)
-        #     print('Lower band:', lower)
-        #     print('Current price:', current_price)
-        #     print('Percentage difference:', str(percentage_diff) + '%')
-        #
-        #     if percentage_diff <= -4:
-        #         print('\nTRADE FOUND, ENTERING TRADE\n')
-        #         in_trade(current_price)
-        #
-        #     time.sleep(15)
-        # finally:
-        #     run()
     else:
         print('\n*** Please run setup first ***\n')
         time.sleep(2)
         main_menu()
+
+
+def look_for_trade():
+    try:
+        lower = bot.get_bbands()
+        current_price = bot.get_current_asset_price()
+        percentage_diff = round((current_price - lower) / lower * 100, 2)
+        btc_balance = bot.get_btc_balance()
+
+        return lower, current_price, percentage_diff, btc_balance
+    except binance.exceptions.BinanceAPIException as error:
+        return error
 
 
 def in_trade(enter_price):
@@ -213,18 +221,6 @@ def in_trade(enter_price):
             main_menu()
 
         time.sleep(10)
-
-
-def look_for_trade():
-        try:
-            lower = bot.get_bbands()
-            current_price = bot.get_current_asset_price()
-            percentage_diff = round((current_price - lower) / lower * 100, 2)
-            btc_balance = bot.get_btc_balance()
-
-            return lower, current_price, percentage_diff, btc_balance
-        except binance.exceptions.BinanceAPIException as error:
-            return error
 
 
 bot = Bot()
