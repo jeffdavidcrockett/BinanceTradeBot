@@ -5,6 +5,7 @@ import sys
 import time
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime
+import getpass
 
 
 def startup():
@@ -42,7 +43,7 @@ def login():
         password_hash = result[1]
         while True:
             print("\nEnter your password, or 'X' to return to previous menu")
-            password = input('> ')
+            password = getpass.getpass('> ')
             if password == 'X':
                 startup()
             elif check_password_hash(password_hash, password):
