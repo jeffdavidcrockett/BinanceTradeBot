@@ -15,21 +15,12 @@ class Bot:
         """
         Uses the provided api and secret key to
         connect to user's binance account
-
-        :param api_key:
-        :param secret_key:
-        :return:
         """
         self.client = Client(api_key, secret_key)
 
     def setup_params(self, asset, trade_amount, interval):
         """
         Sets the trading asset, trade amount and chart time interval
-
-        :param asset:
-        :param trade_amount:
-        :param interval:
-        :return:
         """
         self.asset = asset
         self.trade_amount = trade_amount
@@ -38,8 +29,6 @@ class Bot:
     def check_params(self):
         """
         Does a boolean check to see if trade parameters have been set
-
-        :return:
         """
         if self.asset and self.trade_amount:
             return True
@@ -47,8 +36,6 @@ class Bot:
     def get_btc_balance(self):
         """
         Retrieves the current user's bitcoin balance
-
-        :return:
         """
         btc_balance = self.client.get_asset_balance(asset='BTC')
 
@@ -59,9 +46,6 @@ class Bot:
         Retrieves all tickers from exchange, loops through them.
         If the user's desired asset symbol is found, True will
         be returned. If not, False will be returned.
-
-        :param selected_ticker:
-        :return:
         """
         all_tickers = self.client.get_all_tickers()
         ticker_found = False
@@ -76,9 +60,6 @@ class Bot:
         """
         Selects appropriate kline interval from dictionary based on parameter, reverses
         the order since oldest candles are retrieved first, and data is returned in a list.
-
-        :param limit_:
-        :return:
         """
         kline_intervals = {'15m': Client.KLINE_INTERVAL_15MINUTE, '30m': Client.KLINE_INTERVAL_30MINUTE,
                            '1H': Client.KLINE_INTERVAL_1HOUR, '2H': Client.KLINE_INTERVAL_2HOUR,
@@ -98,8 +79,6 @@ class Bot:
         Squares each of the last 20 closes into new list. Then calculates the
         standard deviation. From there it is able to calculate the upper and lower
         bollinger bands.
-
-        :return:
         """
         klines = self.get_klines(25)
 
@@ -120,9 +99,6 @@ class Bot:
         Takes the user's set trade amount, and divides by the current
         asset price to determine amount of asset to buy. Then commits
         a market buy order.
-
-        :param current_price:
-        :return:
         """
         self.amount = int((self.trade_amount / current_price))
         self.client.order_market_buy(symbol=self.asset,
@@ -131,8 +107,6 @@ class Bot:
     def place_market_sell(self):
         """
         Places a market sell order.
-
-        :return:
         """
         self.client.order_market_sell(symbol=self.asset,
                                       quantity=self.amount)
@@ -140,8 +114,6 @@ class Bot:
     def get_current_asset_price(self):
         """
         Retrieves the currently traded asset price.
-
-        :return:
         """
         klines = self.get_klines(1)
         current_price = float(klines[0][4])

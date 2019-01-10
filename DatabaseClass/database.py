@@ -18,12 +18,6 @@ class Database:
     def create_user(self, username, password_hash, api_key, secret_key):
         """
         Stores user data into user_data table.
-
-        :param username:
-        :param password_hash:
-        :param api_key:
-        :param secret_key:
-        :return:
         """
         self.c.execute('''INSERT INTO user_data VALUES(:username, :password, :api_key, :secret_key)''',
                        {'username': username, 'password': password_hash,
@@ -34,9 +28,6 @@ class Database:
         """
         Retrieves all data from specific username. Returns the first
         match found, since duplicate usernames cannot exist.
-
-        :param username:
-        :return:
         """
         self.c.execute('SELECT * FROM user_data WHERE username=?', (username,))
         return self.c.fetchone()
@@ -44,14 +35,6 @@ class Database:
     def log_trade(self, datetime, asset, trade_size, entry_price, exit_price, gain):
         """
         Logs trade date into trade_data table.
-
-        :param datetime:
-        :param asset:
-        :param trade_size:
-        :param entry_price:
-        :param exit_price:
-        :param gain:
-        :return:
         """
         self.c.execute('''INSERT INTO trade_data VALUES(:datetime, :asset, :trade_size, :trade_entry,
                         :trade_exit, :gain_percent)''', {'datetime': datetime, 'asset': asset,
