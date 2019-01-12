@@ -14,7 +14,7 @@ class Menu:
 
     def startup(self):
         """
-        First function to run. Gives user the options to either login,
+        This method is called from the get go. Gives user the options to either login,
         create a new account, or exit the program.
         """
         print('\n1. Login\n'
@@ -63,9 +63,9 @@ class Menu:
 
     def create_account(self):
         """
-            Allows user to create a new account. User defines a username, a password,
-            Binance account api key, and Binance secret key. New account will be stored
-            in the on-disk database through sqlite.
+        Allows user to create a new account. User defines a username, a password,
+        Binance account api key, and Binance secret key. New account will be stored
+        in the on-disk database through sqlite.
         """
         print('\nEnter a username')
         username = input('> ')
